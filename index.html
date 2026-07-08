@@ -17,7 +17,7 @@
     --line:rgba(242,241,236,0.14);
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{ scroll-snap-type:y mandatory; scroll-behavior:smooth; }
+  html{ scroll-snap-type:y proximity; scroll-behavior:smooth; }
   body{
     background:var(--bg); color:var(--ink);
     font-family:'Archivo',sans-serif; overflow-x:hidden;
@@ -43,21 +43,25 @@
   /* ============ FILM FRAMES ============ */
   .frame{
     position:relative; height:100vh; height:100svh; overflow:hidden;
-    scroll-snap-align:start; scroll-snap-stop:always;
+    scroll-snap-align:start; scroll-snap-stop:normal;
     display:flex; align-items:flex-end;
+    contain:layout paint style;
   }
 
   /* Background image layer */
   .frame .bg{
     position:absolute; inset:0; z-index:1;
+    transform:translateZ(0);
   }
   .frame .bg img{
     width:100%; height:100%; display:block;
-    transform:scale(1.12);
+    transform:scale(1.12) translateZ(0);
+    backface-visibility:hidden;
   }
   .frame.active .bg img{
     transition:transform 8s cubic-bezier(.22,.61,.36,1);
-    transform:scale(1.0);
+    transform:scale(1.0) translateZ(0);
+    will-change:transform;
   }
   .bg-cover img{ object-fit:cover; }
   /* transparent PNG "poster object": stage right, contained, never distorted */
@@ -139,6 +143,138 @@
     .contact-grid{ grid-template-columns:1fr; max-width:420px; }
   }
 
+  /* ============ NO-IMAGE FRAME (pricing / faq / reviews use stage glow only) ============ */
+  .frame.plain{
+    align-items:center; justify-content:center; text-align:center;
+    height:auto; min-height:100vh; min-height:100svh;
+    padding:14vh 0 8vh;
+  }
+  .frame.plain .caption{ padding:0 2.2rem; max-width:980px; display:flex; flex-direction:column; align-items:center; }
+  .frame.plain .lede{ margin-left:auto; margin-right:auto; }
+
+  /* ============ PRICING ============ */
+  .price-grid{
+    margin-top:3rem; display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1.4rem; width:100%; max-width:960px;
+  }
+  .price-cell{
+    background:rgba(20,24,26,0.85);
+    border:1px solid var(--line); border-radius:16px;
+    padding:2.2rem 1.6rem 1.8rem;
+    text-align:left;
+    opacity:0; transform:translateY(40px);
+    transition:border-color .3s ease;
+  }
+  .frame.active .price-cell{
+    opacity:1; transform:translateY(0);
+    transition:opacity .8s cubic-bezier(.19,1,.22,1), transform .8s cubic-bezier(.19,1,.22,1), border-color .3s ease;
+  }
+  .frame.active .price-cell:nth-child(1){ transition-delay:.35s; }
+  .frame.active .price-cell:nth-child(2){ transition-delay:.5s; }
+  .frame.active .price-cell:nth-child(3){ transition-delay:.65s; }
+  .price-cell.rec{ border-color:rgba(224,64,47,0.5); }
+  .price-badge{
+    display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:0.56rem;
+    letter-spacing:0.14em; text-transform:uppercase; color:var(--red);
+    border:1px solid rgba(224,64,47,0.4); border-radius:999px;
+    padding:0.3rem 0.7rem; margin-bottom:1rem;
+  }
+  .price-cell h3{ font-size:1.05rem; font-weight:700; margin-bottom:0.6rem; }
+  .price-cell .amount{ font-family:'IBM Plex Mono',monospace; font-size:1.5rem; font-weight:500; color:var(--ink); margin-bottom:1.1rem; }
+  .price-cell ul{ list-style:none; display:flex; flex-direction:column; gap:0.55rem; }
+  .price-cell li{ font-size:0.82rem; color:var(--dim); line-height:1.5; padding-left:1.2rem; position:relative; }
+  .price-cell li::before{ content:'✓'; position:absolute; left:0; color:var(--red); font-weight:700; }
+  .price-note{
+    margin-top:2rem; font-size:0.82rem; color:var(--dim); max-width:640px;
+    font-family:'IBM Plex Mono',monospace; line-height:1.7;
+  }
+  @media (max-width:820px){
+    .price-grid{ grid-template-columns:1fr; max-width:420px; }
+  }
+
+  .extra-list{
+    margin-top:2.5rem; display:flex; flex-direction:column; gap:0.7rem;
+    width:100%; max-width:680px; text-align:left;
+  }
+  .extra-row{
+    display:flex; justify-content:space-between; align-items:center; gap:1rem;
+    background:rgba(20,24,26,0.85);
+    border:1px solid var(--line); border-radius:12px;
+    padding:1rem 1.3rem;
+    font-size:0.88rem;
+    opacity:0; transform:translateY(24px);
+  }
+  .frame.active .extra-row{
+    opacity:1; transform:translateY(0);
+    transition:opacity .6s cubic-bezier(.19,1,.22,1), transform .6s cubic-bezier(.19,1,.22,1);
+  }
+  .frame.active .extra-row:nth-child(1){ transition-delay:.25s; }
+  .frame.active .extra-row:nth-child(2){ transition-delay:.35s; }
+  .frame.active .extra-row:nth-child(3){ transition-delay:.45s; }
+  .frame.active .extra-row:nth-child(4){ transition-delay:.55s; }
+  .frame.active .extra-row:nth-child(5){ transition-delay:.65s; }
+  .frame.active .extra-row:nth-child(6){ transition-delay:.75s; }
+  .extra-row span{ color:var(--dim); }
+  .extra-row strong{ font-family:'IBM Plex Mono',monospace; font-weight:500; color:var(--ink); white-space:nowrap; }
+  .extra-row.green strong{ color:var(--safe); }
+  @media (max-width:640px){
+    .extra-row{ flex-direction:column; align-items:flex-start; gap:0.3rem; }
+  }
+
+  /* ============ FAQ ============ */
+  .faq-grid{
+    margin-top:3rem; display:flex; flex-direction:column; gap:1rem;
+    width:100%; max-width:760px; text-align:left;
+  }
+  .faq-cell{
+    background:rgba(20,24,26,0.85);
+    border:1px solid var(--line); border-radius:14px;
+    padding:1.5rem 1.7rem;
+    opacity:0; transform:translateY(30px);
+  }
+  .frame.active .faq-cell{
+    opacity:1; transform:translateY(0);
+    transition:opacity .7s cubic-bezier(.19,1,.22,1), transform .7s cubic-bezier(.19,1,.22,1);
+  }
+  .frame.active .faq-cell:nth-child(1){ transition-delay:.3s; }
+  .frame.active .faq-cell:nth-child(2){ transition-delay:.42s; }
+  .frame.active .faq-cell:nth-child(3){ transition-delay:.54s; }
+  .frame.active .faq-cell:nth-child(4){ transition-delay:.66s; }
+  .faq-cell .q{ font-weight:700; font-size:1rem; margin-bottom:0.5rem; }
+  .faq-cell .q span{ color:var(--red); margin-right:0.5rem; }
+  .faq-cell .a{ font-size:0.86rem; color:var(--dim); line-height:1.6; }
+  @media (max-width:720px){
+    .faq-cell{ padding:1.2rem 1.3rem; }
+  }
+
+  /* ============ REVIEWS ============ */
+  .rev-grid{
+    margin-top:3rem; display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1.4rem; width:100%; max-width:960px;
+  }
+  .rev-cell{
+    background:rgba(20,24,26,0.85);
+    border:1px solid var(--line); border-radius:16px;
+    padding:1.8rem 1.6rem;
+    text-align:left;
+    opacity:0; transform:translateY(40px);
+  }
+  .frame.active .rev-cell{
+    opacity:1; transform:translateY(0);
+    transition:opacity .8s cubic-bezier(.19,1,.22,1), transform .8s cubic-bezier(.19,1,.22,1);
+  }
+  .frame.active .rev-cell:nth-child(1){ transition-delay:.35s; }
+  .frame.active .rev-cell:nth-child(2){ transition-delay:.5s; }
+  .frame.active .rev-cell:nth-child(3){ transition-delay:.65s; }
+  .rev-cell .stars{ color:var(--red); font-size:0.9rem; letter-spacing:0.15em; margin-bottom:0.9rem; }
+  .rev-cell .txt{ font-size:0.9rem; color:var(--ink); line-height:1.6; margin-bottom:1.1rem; }
+  .rev-cell .who{ font-family:'IBM Plex Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; color:#8d968f; }
+  @media (max-width:820px){
+    .rev-grid{ grid-template-columns:1fr; max-width:420px; }
+  }
+
   /* Caption block — bottom left */
   .caption{
     position:relative; z-index:3;
@@ -191,20 +327,60 @@
   .frame.cta .lede{ margin-left:auto; margin-right:auto; }
 
   footer{
-    padding:3.4rem 2.2rem; border-top:1px solid var(--line);
-    display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:2rem;
+    position:relative;
+    padding:4.5rem 2.2rem 2.6rem; border-top:1px solid var(--line);
     scroll-snap-align:end;
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center; gap:2.2rem;
+    overflow:hidden;
   }
-  footer .fmark{ font-weight:900; font-size:1.3rem; text-transform:uppercase; }
-  footer .fnote{ font-family:'IBM Plex Mono',monospace; font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase; color:#77807b; line-height:1.9; }
-  footer .fcol{ display:flex; flex-direction:column; gap:0.5rem; }
-  footer .flinks{ gap:0.6rem; }
+  footer .fbg{
+    position:absolute; inset:0; z-index:0;
+  }
+  footer .fbg img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    opacity:0.22; filter:grayscale(0.3);
+  }
+  footer .fshade{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:
+      linear-gradient(to bottom, var(--bg) 0%, rgba(11,13,14,0.85) 12%, rgba(11,13,14,0.93) 100%);
+  }
+  footer > *{ position:relative; z-index:2; }
+  footer .fbrand{ display:flex; flex-direction:column; align-items:center; gap:0.7rem; }
+  footer .fmark{ font-weight:900; font-size:1.7rem; text-transform:uppercase; letter-spacing:-0.01em; }
+  footer .fmark .dot{ color:var(--red); }
+  footer .ftag{
+    font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.14em;
+    text-transform:uppercase; color:#8d968f;
+  }
+  footer .fdivider{ width:48px; height:1px; background:var(--line); }
+  footer .flinks{
+    display:flex; flex-direction:column; align-items:center;
+    gap:0.85rem;
+  }
   footer .flinks a{
-    font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.12em;
+    font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.12em;
     text-transform:uppercase; color:var(--dim); text-decoration:none;
     transition:color .25s ease;
   }
   footer .flinks a:hover{ color:var(--red); }
+  footer .fbottom{
+    width:100%; max-width:1100px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:1rem;
+    padding-top:2rem; border-top:1px solid var(--line);
+  }
+  footer .fnote{
+    font-family:'IBM Plex Mono',monospace; font-size:0.58rem; letter-spacing:0.08em;
+    text-transform:uppercase; color:#77807b; line-height:1.9;
+  }
+  footer .fnote a{ color:#77807b; text-decoration:none; transition:color .25s ease; }
+  footer .fnote a:hover{ color:var(--red); }
+  footer .flegal{ display:flex; gap:1.2rem; flex-wrap:wrap; justify-content:center; }
+  @media (max-width:640px){
+    footer .fbottom{ flex-direction:column; text-align:center; }
+  }
 
   @media (max-width:720px){
     .progress-rail{ display:none; }
@@ -274,6 +450,162 @@
     </div>
   </section>
 
+  <!-- FRAME 2b — ÁRLISTA -->
+  <section class="frame plain" id="arak">
+    <div class="stage"></div>
+    <div class="caption">
+      <div class="eyebrow">Árlista</div>
+      <h2 class="title">Ágyi poloska irtás árak.</h2>
+      <p class="lede">Pontos ajánlatot a helyszíni felmérés után adunk — az alábbi árak tájékoztató jellegűek, kezdő vagy normál fertőzöttség esetén.</p>
+      <div class="price-grid">
+        <div class="price-cell">
+          <div class="price-badge">Alap kezelés</div>
+          <h3>1 szobás ingatlan</h3>
+          <div class="amount">20 900 Ft-tól</div>
+          <ul>
+            <li>Célzott vegyszeres permetezés</li>
+            <li>Teljes helyiség kezelése (1 fekvőhely)</li>
+            <li>Kezdődő vagy normál fertőzöttség</li>
+          </ul>
+        </div>
+        <div class="price-cell rec">
+          <div class="price-badge">Kedvezőbb ár</div>
+          <h3>2 szobás ingatlan</h3>
+          <div class="amount">29 900 Ft-tól</div>
+          <ul>
+            <li>Célzott vegyszeres permetezés</li>
+            <li>Teljes helyiség kezelése (1 fekvőhely)</li>
+            <li>Kezdődő vagy normál fertőzöttség</li>
+          </ul>
+        </div>
+        <div class="price-cell">
+          <div class="price-badge">Nagyobb lakás</div>
+          <h3>3 szobás ingatlan</h3>
+          <div class="amount">39 900 Ft-tól</div>
+          <ul>
+            <li>Célzott vegyszeres permetezés</li>
+            <li>Teljes helyiség kezelése (1 fekvőhely)</li>
+            <li>Kezdődő vagy normál fertőzöttség</li>
+          </ul>
+        </div>
+      </div>
+      <p class="price-note">💡 Az árak tájékoztató jellegűek, kezdő vagy normál fertőzöttség esetén — a pontos díj a helyszíni felmérés után áll össze.</p>
+    </div>
+  </section>
+
+  <!-- FRAME 2b2 — KEZELÉSI SZINTEK -->
+  <section class="frame plain" id="kezelesi-szintek">
+    <div class="stage"></div>
+    <div class="caption">
+      <div class="eyebrow">Árlista — Kezelési szintek</div>
+      <h2 class="title">Fertőzöttség szerint választva.</h2>
+      <p class="lede">A helyszíni állapot alapján javasoljuk a megfelelő technológiát — minél erősebb a fertőzöttség, annál teljesebb kezelés szükséges.</p>
+      <div class="price-grid">
+        <div class="price-cell">
+          <div class="price-badge">Vegyszermentes</div>
+          <h3>Irtás gőzzel</h3>
+          <div class="amount">44 900 Ft-tól</div>
+          <ul>
+            <li>Kisgyermekes családoknak, háziállatok mellett ajánlott</li>
+            <li>Gócpontok megszüntetése, peték célzott irtása</li>
+            <li>Vegyszermentes kezelés érzékenyebb környezetben is</li>
+          </ul>
+        </div>
+        <div class="price-cell rec">
+          <div class="price-badge">Erősebb fertőzöttségnél</div>
+          <h3>Emelt szintű kezelés</h3>
+          <div class="amount">+15 000 Ft-tól</div>
+          <ul>
+            <li>Magasabb dózisú vegyszerhasználat</li>
+            <li>Extra hidegköd-képzés</li>
+            <li>Nehezebben elérhető rések, búvóhelyek kezelése</li>
+          </ul>
+        </div>
+        <div class="price-cell">
+          <div class="price-badge">Súlyosabb esetben</div>
+          <h3>Prémium kombinált kezelés</h3>
+          <div class="amount">59 900 Ft-tól</div>
+          <ul>
+            <li>Permetezés + hidegköd + gőzös kiegészítés</li>
+            <li>Matracvarratok, ágykeret, kanapé alapos kezelése</li>
+            <li>Régebb óta fennálló, visszatérő fertőzöttséghez</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRAME 2b3 — KIEGÉSZÍTŐ DÍJAK -->
+  <section class="frame plain" id="kiegeszito-dijak">
+    <div class="stage"></div>
+    <div class="caption">
+      <div class="eyebrow">Árlista — Kiegészítők</div>
+      <h2 class="title">Kiegészítő díjak.</h2>
+      <div class="extra-list">
+        <div class="extra-row"><span>Galériás szoba kezelése</span><strong>+7 000 Ft-tól</strong></div>
+        <div class="extra-row"><span>Hidegködös kiegészítés</span><strong>+12 000 Ft-tól / szoba</strong></div>
+        <div class="extra-row"><span>Gőzös kezelés kiegészítésként</span><strong>+15 000 Ft-tól</strong></div>
+        <div class="extra-row"><span>További ágy, kanapé vagy fekvőhely</span><strong>+5 000 Ft-tól</strong></div>
+        <div class="extra-row"><span>Erős fertőzöttség, több gócpont</span><strong>Helyszíni ajánlat</strong></div>
+        <div class="extra-row green"><span>Kiszállás Budapest területén</span><strong>Díjmentes</strong></div>
+      </div>
+      <p class="price-note">💡 Telefonon előzetes tájékoztatást adunk, de a pontos kezelési díj a helyszíni felmérés után állapítható meg.</p>
+    </div>
+  </section>
+
+  <!-- FRAME 2c — FAQ -->
+  <section class="frame plain" id="faq">
+    <div class="stage"></div>
+    <div class="caption">
+      <div class="eyebrow">Gyakori kérdések</div>
+      <h2 class="title">Amit tudni érdemes.</h2>
+      <div class="faq-grid">
+        <div class="faq-cell">
+          <div class="q"><span>—</span>Mennyi idő alatt tudnak jönni?</div>
+          <div class="a">Budapesten és környékén sok esetben akár aznap tudunk kiszállni, 1 órán belül. A pontos időpont telefonos egyeztetéssel történik.</div>
+        </div>
+        <div class="faq-cell">
+          <div class="q"><span>—</span>Szükséges-e ismétlés?</div>
+          <div class="a">A fertőzöttség mértékétől függ. Sok esetben javasolt kontroll vagy ismétlés előre egyeztetett ütemben, hogy a rejtett gócok is megszűnjenek.</div>
+        </div>
+        <div class="faq-cell">
+          <div class="q"><span>—</span>Biztonságos-e a kezelés gyermekek és háziállatok mellett?</div>
+          <div class="a">Kizárólag engedélyezett technológiákkal dolgozunk, és minden esetben pontos, érthető teendőlistát adunk a kezelés előtti és utáni időszakra.</div>
+        </div>
+        <div class="faq-cell">
+          <div class="q"><span>—</span>Mikor lehet visszamenni a helyiségbe?</div>
+          <div class="a">Permetezés és hidegköd után minimum 3 óra elteltével lehet visszamenni. Forrógőz-kezelés esetén az ingatlan azonnal újra használható.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRAME 2d — VÉLEMÉNYEK -->
+  <section class="frame plain" id="velemenyek">
+    <div class="stage"></div>
+    <div class="caption">
+      <div class="eyebrow">Vélemények</div>
+      <h2 class="title">Ügyfelek mondták.</h2>
+      <div class="rev-grid">
+        <div class="rev-cell">
+          <div class="stars">★★★★★</div>
+          <p class="txt">„Gyorsan kijöttek, mindent érthetően elmagyaráztak. Azóta nyugodtan alszunk."</p>
+          <div class="who">Ügyfél · Budapest</div>
+        </div>
+        <div class="rev-cell">
+          <div class="stars">★★★★★</div>
+          <p class="txt">„Diszkréten érkeztek, korrekt ár, pontos tájékoztatás. Ajánlom mindenkinek."</p>
+          <div class="who">Ügyfél · XIII. kerület</div>
+        </div>
+        <div class="rev-cell">
+          <div class="stars">★★★★★</div>
+          <p class="txt">„Kaptunk teendőlistát is, sokat segített. Profi csapat, gyors megoldás."</p>
+          <div class="who">Ügyfél · Agglomeráció</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FRAME 3 — guarantee -->
   <section class="frame" id="s3" data-accent="safe">
     <div class="stage"></div>
@@ -322,19 +654,32 @@
   </section>
 
   <footer>
-    <div class="fcol">
-      <div class="fmark">PoloskaStop</div>
-      <div class="fnote">Ágyi poloska specialista · Diszkrét, garanciális irtás</div>
+    <div class="fbg"><img id="img-fbg" alt=""></div>
+    <div class="fshade"></div>
+
+    <div class="fbrand">
+      <div class="fmark">PoloskaStop<span class="dot">.</span></div>
+      <div class="ftag">Ágyi poloska specialista · Diszkrét, garanciális irtás</div>
     </div>
-    <div class="fcol flinks">
+
+    <div class="fdivider"></div>
+
+    <nav class="flinks">
       <a href="#s1">Vegyszeres irtás</a>
       <a href="#s2">Gőzkezelés</a>
+      <a href="#arak">Árlista</a>
+      <a href="#faq">GYIK</a>
+      <a href="#velemenyek">Vélemények</a>
       <a href="#s3">Garancia</a>
       <a href="#kapcsolat">Kapcsolat</a>
-    </div>
-    <div class="fcol fnote">
-      © 2026 PoloskaStop Kft. · Minden jog fenntartva<br>
-      Adatkezelési tájékoztató · ÁSZF
+    </nav>
+
+    <div class="fbottom">
+      <div class="fnote">© 2026 PoloskaStop Kft. · Minden jog fenntartva</div>
+      <div class="flegal fnote">
+        <a href="#">Adatkezelési tájékoztató</a>
+        <a href="#">ÁSZF</a>
+      </div>
     </div>
   </footer>
 
@@ -353,6 +698,7 @@ document.getElementById('img-hero').src  = TEX_BUG;
 document.getElementById('img-equip').src = TEX_EQUIP;
 document.getElementById('img-steam').src = TEX_STEAM;
 document.getElementById('img-nobug').src = TEX_NOBUG;
+document.getElementById('img-fbg').src    = TEX_NOBUG;
 document.getElementById('img-phone').src = TEX_PHONE;
 document.getElementById('img-mail').src  = TEX_MAIL;
 document.getElementById('img-map').src   = TEX_MAP;
@@ -367,7 +713,13 @@ function updateProgress(){
   progressFill.style.height = (p*100).toFixed(1)+'%';
   progressNum.textContent = String(Math.round(p*100)).padStart(2,'0');
 }
-window.addEventListener('scroll', updateProgress, { passive:true });
+let progressTicking = false;
+window.addEventListener('scroll', () => {
+  if (!progressTicking){
+    requestAnimationFrame(() => { updateProgress(); progressTicking = false; });
+    progressTicking = true;
+  }
+}, { passive:true });
 window.addEventListener('resize', updateProgress);
 updateProgress();
 
@@ -380,7 +732,7 @@ const ioTall = new IntersectionObserver((entries)=>{
   entries.forEach(e => e.target.classList.toggle('active', e.isIntersecting));
 }, { threshold: 0.18 });
 document.querySelectorAll('.frame').forEach(f=>{
-  (f.classList.contains('cta') ? ioTall : io).observe(f);
+  (f.classList.contains('cta') || f.classList.contains('plain') ? ioTall : io).observe(f);
 });
 </script>
 </body>
