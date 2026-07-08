@@ -1,9 +1,36 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17854505364"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-17854505364');
+</script>
+
+<!-- Telefon kattintás konverzió -->
+<script>
+  function gtag_report_conversion() {
+    gtag('event', 'conversion', {
+      'send_to': 'AW-17854505364/3JetCJyzrfYbEJTD2MFC',
+      'transport_type': 'beacon'
+    });
+  }
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll("a[href='tel:+36207732991']").forEach(a => {
+      a.addEventListener('click', () => {
+        try { gtag_report_conversion(); } catch(e) {}
+      }, { passive: true });
+    });
+  });
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POLOSKASTOP — Ágyi Poloska Irtás</title>
+<title>Ágyi poloska irtás – Budapest, Pest megye | AgyiPoloskastop.hu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -314,6 +341,26 @@
   .spec .num{ font-size:1.35rem; color:var(--mark, var(--red)); }
   .spec .label{ font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:#8d968f; margin-top:0.3rem; }
 
+  /* Mini CTA row — call + jump-to-pricing, under a scene's lede/specs */
+  .mini-cta{
+    margin-top:1.8rem; display:flex; gap:0.9rem; flex-wrap:wrap;
+  }
+  .mini-cta a{
+    font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.1em;
+    text-transform:uppercase; text-decoration:none;
+    padding:0.85rem 1.4rem; border-radius:999px;
+    display:inline-flex; align-items:center; gap:0.5rem;
+    transition:transform .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .mini-cta .call{
+    background:var(--red); color:var(--bg); font-weight:700;
+  }
+  .mini-cta .call:hover{ transform:translateY(-2px); }
+  .mini-cta .jump{
+    background:transparent; color:var(--ink); border:1px solid var(--line);
+  }
+  .mini-cta .jump:hover{ border-color:rgba(242,241,236,0.4); transform:translateY(-2px); }
+
   .frame[data-accent="steam"]{ --mark:var(--steam); --glow:rgba(168,216,234,0.13); }
   .frame[data-accent="safe"]{ --mark:var(--safe); --glow:rgba(134,201,138,0.13); }
 
@@ -398,8 +445,8 @@
 <body>
 
 <header class="brand">
-  <span class="a">PoloskaStop&nbsp;·&nbsp;Kft.</span>
-  <span class="b">Ágyi&nbsp;Poloska&nbsp;Specialista</span>
+  <span class="a">AgyiPoloskaStop&nbsp;.hu</span>
+  <span class="b">Ágyi&nbsp;Poloska&nbsp;Irtás&nbsp;·&nbsp;2008&nbsp;óta</span>
 </header>
 
 <div class="progress-rail">
@@ -409,14 +456,24 @@
 
 <main>
 
-  <!-- FRAME 0 — HERO: the enemy -->
+  <!-- FRAME 0 — HERO -->
   <section class="frame" id="s0">
     <div class="stage"></div>
     <div class="bg bg-poster"><img id="img-hero" alt="Ágyi poloska közelről"></div>
     <div class="shade"></div>
     <div class="caption">
-      <h1 class="title">Ismerd meg az <em>ellenséget.</em></h1>
-      <p class="lede">Az ágyi poloska nem a koszos lakást keresi — az embert. Egyetlen utazótáskával beköltözik, és számolatlanul szaporodik. Görgess, és nézd meg, hogyan tüntetjük el.</p>
+      <div class="eyebrow">Budapest &amp; Pest megye · 2008 óta</div>
+      <h1 class="title">Ágyi poloska <em>irtás.</em></h1>
+      <p class="lede">Viszkető csípések reggelre? Fekete pöttyök a matracon? Akár 1 órán belül helyszínen vagyunk — diszkréten, garancia mellett.</p>
+      <div class="specs">
+        <div class="spec"><div class="num">1 óra</div><div class="label">Kiszállási idő</div></div>
+        <div class="spec"><div class="num">500+</div><div class="label">Sikeres irtás</div></div>
+        <div class="spec"><div class="num">0 Ft</div><div class="label">Kiszállási díj</div></div>
+      </div>
+      <div class="mini-cta">
+        <a class="call" href="tel:+36207732991">📞 Hívjon most</a>
+        <a class="jump" href="#arak">Árlista</a>
+      </div>
     </div>
   </section>
 
@@ -426,11 +483,16 @@
     <div class="bg bg-cover"><img id="img-equip" alt="ULV hidegköd-generátor és permetező felszerelés"></div>
     <div class="shade"></div>
     <div class="caption">
+      <div class="eyebrow">Komplex vegyszeres kezelés</div>
       <h2 class="title">Permetezés és hidegköd-képzés.</h2>
-      <p class="lede">Professzionális ULV hidegköd-generátorral és célzott permetezéssel juttatjuk el az irtószert oda, ahová kézzel sosem érnél el — résekbe, varratokba, bútorok mögé.</p>
+      <p class="lede">Célzott készítmények kerülnek kijuttatásra a búvóhelyekre, repedésekbe, ágykeretekhez és bútorillesztésekhez. A finom ködképzésű technológia a nehezen hozzáférhető területekre is eljuttatja a hatóanyagot.</p>
       <div class="specs">
-        <div class="spec"><div class="num">ULV</div><div class="label">Hidegköd technológia</div></div>
-        <div class="spec"><div class="num">2x</div><div class="label">Kezelés 14 nap eltéréssel</div></div>
+        <div class="spec"><div class="num">Tartós</div><div class="label">Hosszan tartó hatás</div></div>
+        <div class="spec"><div class="num">ULV</div><div class="label">Hidegköd opció</div></div>
+      </div>
+      <div class="mini-cta">
+        <a class="call" href="tel:+36207732991">📞 Hívjon most</a>
+        <a class="jump" href="#arak">Ugrás az árakhoz ↓</a>
       </div>
     </div>
   </section>
@@ -441,11 +503,16 @@
     <div class="bg bg-poster"><img id="img-steam" alt="Ipari száraz gőztisztító berendezés"></div>
     <div class="shade"></div>
     <div class="caption">
-      <h2 class="title">180°C-os száraz gőz. Nulla vegyszer.</h2>
-      <p class="lede">Matracra, gyerekszobába, allergiásoknak: a túlhevített száraz gőz a poloskát és a tojásait is azonnal elpusztítja — vegyszermaradvány nélkül.</p>
+      <div class="eyebrow">Vegyszermentes kezelés</div>
+      <h2 class="title">Száraz, túlhevített gőz.</h2>
+      <p class="lede">Kifejezetten ágyi poloska elleni technológia. A hősokk másodpercek alatt elpusztítja a poloskát és petéit is — vegyszermentes eljárással. Kezelés után azonnal visszamehet a helyiségbe.</p>
       <div class="specs">
-        <div class="spec"><div class="num">180°C</div><div class="label">Gőzhőmérséklet</div></div>
+        <div class="spec"><div class="num">99%</div><div class="label">Hatékonyság</div></div>
         <div class="spec"><div class="num">0</div><div class="label">Vegyszermaradvány</div></div>
+      </div>
+      <div class="mini-cta">
+        <a class="call" href="tel:+36207732991">📞 Hívjon most</a>
+        <a class="jump" href="#arak">Ugrás az árakhoz ↓</a>
       </div>
     </div>
   </section>
@@ -612,12 +679,13 @@
     <div class="bg bg-poster"><img id="img-nobug" alt="Áthúzott ágyi poloska — garancia szimbólum"></div>
     <div class="shade"></div>
     <div class="caption">
+      <div class="eyebrow">Garancia</div>
       <h2 class="title">Poloskamentes otthon. Papírral.</h2>
-      <p class="lede">A második kezelés után ellenőrző monitorozást végzünk. Ha 90 napon belül élő poloskát találsz, díjmentesen jövünk újra.</p>
+      <p class="lede">Ha az első kezelés után a probléma nem szűnt meg teljesen, visszatérünk és elvégezzük a szükséges ismétlést. Ha egy harmadik alkalom is szükséges, azt díjmentesen biztosítjuk.</p>
       <div class="specs">
-        <div class="spec"><div class="num">99.9%</div><div class="label">Hatásfok 2 kezeléssel</div></div>
-        <div class="spec"><div class="num">90nap</div><div class="label">Garancia</div></div>
-        <div class="spec"><div class="num">24ó</div><div class="label">Kiszállás</div></div>
+        <div class="spec"><div class="num">1.</div><div class="label">Alap irtás</div></div>
+        <div class="spec"><div class="num">2.</div><div class="label">Ismétlés ha szükséges</div></div>
+        <div class="spec"><div class="num">3.</div><div class="label">Ingyenes kezelés</div></div>
       </div>
     </div>
   </section>
@@ -627,27 +695,27 @@
     <div class="stage"></div>
     <div class="shade"></div>
     <div class="caption">
-      <div class="eyebrow">Ingyenes telefonos konzultáció</div>
+      <div class="eyebrow">Azonnali beavatkozás szükséges?</div>
       <h2 class="title">Aludj újra nyugodtan.</h2>
-      <p class="lede">Jelöletlen autóval érkezünk. A szomszéd nem tudja meg — a poloska viszont megérzi.</p>
+      <p class="lede">Jelöletlen autóval érkezünk. A szomszéd nem tudja meg — a poloska viszont megérzi. Átlagos visszahívási idő: 5–15 perc.</p>
       <div class="contact-grid">
-        <a class="contact-cell" href="tel:+36301234567">
+        <a class="contact-cell" href="tel:+36207732991">
           <div class="contact-icon"><img id="img-phone" alt="Telefon ikon"></div>
-          <div class="k">Telefon — 0–24</div>
-          <div class="v red">+36 30 123 4567</div>
-          <div class="s">Azonnali időpont, akár másnapi kiszállás.</div>
+          <div class="k">Telefon</div>
+          <div class="v red">+36 20 773 2991</div>
+          <div class="s">H–P: 06:00–21:00 · Szo–V: 07:00–19:00</div>
         </a>
-        <a class="contact-cell" href="mailto:info@poloskastop.hu">
+        <a class="contact-cell" href="mailto:info@agyipoloskastop.hu">
           <div class="contact-icon"><img id="img-mail" alt="E-mail ikon"></div>
           <div class="k">E-mail</div>
-          <div class="v">info@poloskastop.hu</div>
+          <div class="v">info@agyipoloskastop.hu</div>
           <div class="s">Írj pár sort a helyzetről, 24 órán belül válaszolunk.</div>
         </a>
         <div class="contact-cell">
           <div class="contact-icon"><img id="img-map" alt="Budapest térkép"></div>
           <div class="k">Működési terület</div>
           <div class="v">Budapest + Pest megye</div>
-          <div class="s">Kiszállási díj nélkül a főváros teljes területén.</div>
+          <div class="s">Díjmentes kiszállás a főváros teljes területén.</div>
         </div>
       </div>
     </div>
@@ -658,8 +726,8 @@
     <div class="fshade"></div>
 
     <div class="fbrand">
-      <div class="fmark">PoloskaStop<span class="dot">.</span></div>
-      <div class="ftag">Ágyi poloska specialista · Diszkrét, garanciális irtás</div>
+      <div class="fmark">AgyiPoloskaStop<span class="dot">.hu</span></div>
+      <div class="ftag">Ágyi poloska irtás gyors kiszállással Budapesten és Pest megyében</div>
     </div>
 
     <div class="fdivider"></div>
@@ -675,9 +743,9 @@
     </nav>
 
     <div class="fbottom">
-      <div class="fnote">© 2026 PoloskaStop Kft. · Minden jog fenntartva</div>
+      <div class="fnote">AgyiPoloskastop.hu © 2025 — Minden jog fenntartva</div>
       <div class="flegal fnote">
-        <a href="#">Adatkezelési tájékoztató</a>
+        <a href="adatvedelem.html">Adatkezelési tájékoztató</a>
         <a href="#">ÁSZF</a>
       </div>
     </div>
