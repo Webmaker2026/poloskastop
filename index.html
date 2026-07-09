@@ -112,6 +112,20 @@
       linear-gradient(to bottom, rgba(11,13,14,0.75), transparent 22%),
       rgba(11,13,14,0.22);
   }
+  /* Seam: fixed-height fade to the shared bg color at the very top/bottom of
+     every frame, so adjacent sections blend into one another instead of
+     showing a hard cut where two different backgrounds meet. */
+  .frame .seam{
+    position:absolute; left:0; right:0; z-index:3; pointer-events:none;
+  }
+  .frame .seam.top{
+    top:0; height:12vh;
+    background:linear-gradient(to bottom, var(--bg), transparent);
+  }
+  .frame .seam.bottom{
+    bottom:0; height:12vh;
+    background:linear-gradient(to top, var(--bg), transparent);
+  }
 
   /* Scene marker — top left, like a slate */
   .eyebrow{
@@ -803,6 +817,18 @@ window.addEventListener('scroll', () => {
 }, { passive:true });
 window.addEventListener('resize', updateProgress);
 updateProgress();
+
+// Seam overlays: every frame gets a top+bottom fade to the shared bg color,
+// so two adjacent sections blend into each other instead of showing a hard
+// cut. Injected in JS to avoid touching every single frame's markup by hand.
+document.querySelectorAll('.frame').forEach(f=>{
+  const top = document.createElement('div');
+  top.className = 'seam top';
+  const bottom = document.createElement('div');
+  bottom.className = 'seam bottom';
+  f.appendChild(top);
+  f.appendChild(bottom);
+});
 
 // Active frame: Ken Burns + staggered caption/contact reveals.
 // The CTA frame can be taller than the viewport, so it gets a lower threshold.
